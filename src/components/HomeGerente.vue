@@ -1,13 +1,13 @@
   <template>
     <div class="container">
       <div class="sidebar">
-        <div class="welcome-message">Bem vindo, {{ user.name }}</div>
-        <button @click="selectOption('requestEventCreation')" class="sidebar-button">Solicitar Criação de Evento</button>
-        <button @click="logout" class="sidebar-button">Sair</button>
+        <div class="welcome-message">BEM VINDO, {{ user.name }}</div>
+        <button @click="selectOption('requestEventCreation')" class="sidebar-button">SOLICITAR CRIAÇÃO DE EVENTO</button>
+        <button @click="logout" class="sidebar-button">SAIR</button>
       </div>
       <div class="content">
         <div v-if="selectedOption === 'requestEventCreation'" class="form">
-          <h2>Solicitar Criação de Evento</h2>
+          <h2>SOLICITAR CRIAÇÃO DE EVENTO</h2>
           <label>Nome:</label>
           <input type="text" placeholder="Nome" v-model="eventName" />
           <label>Data:</label>
@@ -85,12 +85,8 @@
             this.eventLocation = '';
             this.eventType = '';
         } catch (error) {
-            if (error.response && error.response.status === 409) {
-            this.popupMessage = 'Erro ao cadastrar o evento: Nome já está em uso';
-            } else {
-            this.popupMessage = 'Erro ao cadastrar o evento: ' + error.message;
-            }
-            this.showPopup = true;
+        this.popupMessage = error.response.data;
+        this.showPopup = true;
         }
         },
 
@@ -108,20 +104,20 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  padding: 15px; /* Mantido o mesmo */
-  width: 25%; /* Mantido o mesmo */
+  padding: 15px;
+  width: 25%;
   background-color: white;
   border: 1px solid #ccc;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
-  font-size: 30px; /* Aumentado para 30 */
+  font-size: 30px;
   text-align: center;
-  margin-bottom: 20px; /* Adicionado para aumentar a margem entre o texto e o botão */
+  margin-bottom: 20px;
 }
 
 .popup button {
-  padding: 10px; /* Mantido o mesmo */
-  font-size: 30px; /* Aumentado para 30 */
+  padding: 10px;
+  font-size: 30px;
   cursor: pointer;
   background-color: #FF69B4;
   color: white;
@@ -129,7 +125,7 @@
   width: 100%;
   transition: background-color 0.3s;
   font-weight: bold;
-  margin-top: 20px; /* Adicionado para aumentar a margem entre o texto e o botão */
+  margin-top: 20px;
 }
 
 .popup button:hover {
@@ -148,6 +144,10 @@
   padding: 5px;
   margin-bottom: 20px;
   font-size: 18px;
+}
+
+.sidebar-button {
+  font-size: 22px;
 }
   </style>
   

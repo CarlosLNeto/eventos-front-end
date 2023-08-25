@@ -1,7 +1,6 @@
 <template>
   <div class="container">
     <div class="sidebar">
-      <!-- Você pode adicionar links ou botões aqui, se necessário -->
     </div>
     <div class="content">
       <div class="form">
@@ -15,7 +14,6 @@
 
 <script>
 export default {
-  // Você pode adicionar lógica aqui, se necessário
 };
 </script>
 

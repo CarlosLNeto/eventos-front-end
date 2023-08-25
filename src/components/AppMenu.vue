@@ -2,14 +2,14 @@
   <router-view></router-view>
   <div class="container">
     <div class="sidebar">
-      <button @click="selectOption('registerUser')" class="sidebar-button">Cadastrar Usuário</button>
-      <button @click="selectOption('loginUser')" class="sidebar-button">Login como Usário</button>
-      <button @click="selectOption('registerGerente')" class="sidebar-button">Cadastrar Gerente de Eventos</button>
-      <button @click="selectOption('loginGerente')" class="sidebar-button">Login como Gerente</button>
+      <button @click="selectOption('registerUser')" class="sidebar-button">CADASTRAR USUÁRIO</button>
+      <button @click="selectOption('loginUser')" class="sidebar-button">LOGIN COMO USUÁRIO</button>
+      <button @click="selectOption('registerGerente')" class="sidebar-button">CADASTRAR GERENTE DE EVENTOS</button>
+      <button @click="selectOption('loginGerente')" class="sidebar-button">LOGIN COMO GERENTE</button>
     </div>
     <div class="content">
       <div v-if="selectedOption === 'registerUser'" class="form">
-        <h2>Cadastrar Usuário</h2>
+        <h2>CADASTRAR USUÁRIO</h2>
         <label>Nome:</label>
         <input type="text" placeholder="Nome" v-model="name" />
         <label>Celular:</label>
@@ -23,7 +23,7 @@
         <button class="form-button" @click="cadastrarUsuario">Cadastrar</button>
       </div>
       <div v-if="selectedOption === 'registerGerente'" class="form">
-        <h2>Cadastrar Gerente</h2>
+        <h2>CADASTRAR GERENTE</h2>
         <label>Nome:</label>
         <input type="text" placeholder="Nome" v-model="name" />
         <label>Celular:</label>
@@ -37,7 +37,7 @@
         <button class="form-button" @click="cadastrarGerente">Cadastrar</button>
       </div>
       <div v-if="selectedOption === 'loginUser'" class="form">
-        <h2>Login como Usuário</h2>
+        <h2>LOGIN COMO USUÁRIO</h2>
         <label>Login:</label>
         <input type="text" placeholder="Login" v-model="usuario.login"/>
         <label>Senha:</label>
@@ -45,7 +45,7 @@
         <button class="form-button" @click="loginUser">Realizar Login</button>
       </div>
       <div v-if="selectedOption === 'loginGerente'" class="form">
-        <h2>Login como Gerente</h2>
+        <h2>LOGIN COMO GERENTE</h2>
         <label>Login:</label>
         <input type="text" placeholder="Login" v-model="usuario.login"/>
         <label>Senha:</label>
@@ -98,8 +98,8 @@ export default({
           localStorage.setItem('user', JSON.stringify({ name: response.data.name, email: response.data.email, id: response.data.id }))
           this.$router.push({ path: '/user' });
         })
-        .catch((error) => {
-          this.popupMessage = 'Erro ao logar: ' + error.message;
+        .catch(() => {
+          this.popupMessage = 'Login/Senha foram inseridos incorretamente.';
           this.showPopup = true;
         })
     },
@@ -117,8 +117,8 @@ export default({
           localStorage.setItem('user', JSON.stringify({ name: response.data.name, email: response.data.email, id: response.data.id }))
           this.$router.push({ path: '/gerente' });
         })
-        .catch((error) => {
-          this.popupMessage = 'Erro ao logar: ' + error.message;
+        .catch(() => {
+          this.popupMessage = 'Login/Senha foram inseridos incorretamente.';
           this.showPopup = true;
         })
     },
@@ -141,10 +141,11 @@ export default({
         this.login = '';
         this.password = '';
       } catch (error) {
-        this.popupMessage = 'Erro ao cadastrar o usuário: ' + error.message;
+        this.popupMessage = error.response.data;
         this.showPopup = true;
       }
     },
+
 
     async cadastrarGerente() {
       try {
@@ -164,7 +165,7 @@ export default({
         this.login = '';
         this.password = '';
       } catch (error) {
-        this.popupMessage = 'Erro ao cadastrar o usuário: ' + error.message;
+        this.popupMessage = error.response.data;
         this.showPopup = true;
       }
     },
@@ -182,20 +183,20 @@ body {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  padding: 15px; /* Mantido o mesmo */
-  width: 25%; /* Mantido o mesmo */
+  padding: 15px;
+  width: 25%;
   background-color: white;
   border: 1px solid #ccc;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
-  font-size: 30px; /* Aumentado para 30 */
+  font-size: 30px;
   text-align: center;
-  margin-bottom: 20px; /* Adicionado para aumentar a margem entre o texto e o botão */
+  margin-bottom: 20px;
 }
 
 .popup button {
-  padding: 10px; /* Mantido o mesmo */
-  font-size: 30px; /* Aumentado para 30 */
+  padding: 10px;
+  font-size: 30px;
   cursor: pointer;
   background-color: #FF69B4;
   color: white;
@@ -203,7 +204,7 @@ body {
   width: 100%;
   transition: background-color 0.3s;
   font-weight: bold;
-  margin-top: 20px; /* Adicionado para aumentar a margem entre o texto e o botão */
+  margin-top: 20px;
 }
 
 .popup button:hover {
