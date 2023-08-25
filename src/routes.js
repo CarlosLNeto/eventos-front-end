@@ -1,15 +1,29 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeUser from "./components/HomeUser.vue";
 import AppMenu from "./components/AppMenu.vue";
+import HomeUser from "./components/HomeUser.vue";
+import HomeGerente from "./components/HomeGerente.vue";
+import ErrorNotFound from "./components/ErrorNotFound.vue";
 
-const routes = [
-  { path: "/", component: AppMenu },
-  { path: "/user", component: HomeUser },
-];
-
-const router = createRouter({
+export const router = createRouter({
   history: createWebHistory(),
-  routes,
+  routes: [
+    {
+      path: "/",
+      component: AppMenu,
+    },
+    {
+      path: "/user",
+      component: HomeUser,
+    },
+    {
+      path: "/gerente",
+      component: HomeGerente,
+    },
+    {
+      path: "/:catchAll(.*)",
+      component: ErrorNotFound,
+    },
+  ],
 });
 
 export default router;

@@ -1,4 +1,5 @@
 <template>
+  <router-view></router-view>
   <div class="container">
     <div class="sidebar">
       <button @click="selectOption('registerUser')" class="sidebar-button">Cadastrar Usuário</button>
@@ -38,17 +39,17 @@
       <div v-if="selectedOption === 'loginUser'" class="form">
         <h2>Login como Usuário</h2>
         <label>Login:</label>
-        <input type="text" placeholder="Login" v-model="login"/>
+        <input type="text" placeholder="Login" v-model="usuario.login"/>
         <label>Senha:</label>
-        <input type="password" placeholder="Senha" v-model="password"/>
+        <input type="password" placeholder="Senha" v-model="usuario.password"/>
         <button class="form-button" @click="loginUser">Realizar Login</button>
       </div>
       <div v-if="selectedOption === 'loginGerente'" class="form">
         <h2>Login como Gerente</h2>
         <label>Login:</label>
-        <input type="text" placeholder="Login" v-model="login"/>
+        <input type="text" placeholder="Login" v-model="usuario.login"/>
         <label>Senha:</label>
-        <input type="password" placeholder="Senha" v-model="password"/>
+        <input type="password" placeholder="Senha" v-model="usuario.password"/>
         <button class="form-button" @click="loginGerente">Realizar Login</button>
       </div>
     </div>
@@ -56,7 +57,6 @@
       {{ popupMessage }}
       <button @click="showPopup = false">Fechar</button>
     </div>
-
   </div>
 </template>
 
@@ -64,23 +64,63 @@
 <script>
 import axios from 'axios';
 
-export default {
+export default({
   data() {
     return {
       selectedOption: 'none',
       userType: 'none',
       popupMessage: '',
       showPopup: false,
-      name: '',
-      celular: '',
-      email: '',
-      login: '',
-      password: ''
+      usuario:{
+        name: '',
+        celular: '',
+        email: '',
+        login: '',
+        password: ''
+      }
     };
   },
   methods: {
     selectOption(option) {
       this.selectedOption = option;
+    },
+
+    loginUser () {
+      const loginUsuario = {
+        login: this.usuario.login,
+        password: this.usuario.password
+      }
+
+      axios.post('http://localhost:8080/user/login', loginUsuario)
+        .then(response => {
+          this.popupMessage = 'Login efetuado!';
+          this.showPopup = true;
+          localStorage.setItem('user', JSON.stringify({ name: response.data.name, email: response.data.email, id: response.data.id }))
+          this.$router.push({ path: '/user' });
+        })
+        .catch((error) => {
+          this.popupMessage = 'Erro ao logar: ' + error.message;
+          this.showPopup = true;
+        })
+    },
+
+    loginGerente () {
+      const loginGerente = {
+        login: this.usuario.login,
+        password: this.usuario.password
+      }
+
+      axios.post('http://localhost:8080/gerente/login', loginGerente)
+        .then(response => {
+          this.popupMessage = 'Login efetuado!';
+          this.showPopup = true;
+          localStorage.setItem('user', JSON.stringify({ name: response.data.name, email: response.data.email, id: response.data.id }))
+          this.$router.push({ path: '/gerente' });
+        })
+        .catch((error) => {
+          this.popupMessage = 'Erro ao logar: ' + error.message;
+          this.showPopup = true;
+        })
     },
     
     async cadastrarUsuario() {
@@ -128,50 +168,34 @@ export default {
         this.showPopup = true;
       }
     },
-
-    async loginUser() {
-      try {
-        const response = await axios.post('http://localhost:8080/user/login', {
-          login: this.login,
-          password: this.password,
-        });
-        this.user = response.data.user;
-        this.popupMessage = 'Login efetuado!';
-        this.showPopup = true;
-        localStorage.setItem('user', JSON.stringify({ name: response.data.name, email: response.data.email, id: response.data.id }))
-        this.$router.push('/user');
-      } catch (error) {
-        this.popupMessage = 'Erro ao logar: ' + error.message;
-        this.showPopup = true;
-      }
-    },
-  /* async loginGerente() {
-    
-  }, */
-
   },
-};
+});
 </script>
 
 <style>
+body {
+  overflow-y: hidden;
+}
+
 .popup {
   position: fixed;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  padding: 30px; 
-  width: 50%; 
+  padding: 15px; /* Mantido o mesmo */
+  width: 25%; /* Mantido o mesmo */
   background-color: white;
   border: 1px solid #ccc;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
-  font-size: 30px; 
+  font-size: 30px; /* Aumentado para 30 */
   text-align: center;
+  margin-bottom: 20px; /* Adicionado para aumentar a margem entre o texto e o botão */
 }
 
 .popup button {
-  padding: 20px;
-  font-size: 24px;
+  padding: 10px; /* Mantido o mesmo */
+  font-size: 30px; /* Aumentado para 30 */
   cursor: pointer;
   background-color: #FF69B4;
   color: white;
@@ -179,11 +203,14 @@ export default {
   width: 100%;
   transition: background-color 0.3s;
   font-weight: bold;
+  margin-top: 20px; /* Adicionado para aumentar a margem entre o texto e o botão */
 }
 
 .popup button:hover {
-  background-color: #FF1493; 
+  background-color: #FF1493;
 }
+
+
 
 .container {
   width: 100%;
@@ -227,23 +254,25 @@ export default {
 }
 
 .form h2 {
-  font-size: 52px;
+  font-size: 80px;
   margin-bottom: 20px;
   color: #FF69B4; 
   font-weight: bold; 
+  font-family: 'Arial', sans-serif;
 }
 
-label {
-  font-size: 18px;
+.form label {
+  font-size: 22px;
   display: block;
   margin: 10px 0;
   font-family: 'Arial', sans-serif;
 }
 
+
 input {
   width: 100%;
   padding: 10px;
-  font-size: 16px;
+  font-size: 22px;
   margin-bottom: 20px;
   border: 1px solid #ccc;
   font-family: 'Arial', sans-serif; 
